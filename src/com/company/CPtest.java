@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * 生产者-消费者模式 通过阻塞队列BlockingQueue 实现
  * Created by Justin
  * 2019/4/10  17:45
  */
