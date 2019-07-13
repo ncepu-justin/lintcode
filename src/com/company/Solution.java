@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,6 +16,162 @@ import java.util.List;
  * }
  */
 public class Solution {
+
+
+    /**
+     * 判断是不是回文串
+     * @param s
+     * @return
+     */
+    public boolean isPalindrome(String s) {
+        if(s.length() == 0)
+            return true;
+        int l = 0, r = s.length() - 1;
+        while(l < r){
+            //确定指定的字符是否为字母或数字
+            if(!Character.isLetterOrDigit(s.charAt(l))){
+                l++;
+            }else if(!Character.isLetterOrDigit(s.charAt(r))){
+                r--;
+            }else{
+                if(Character.toLowerCase(s.charAt(l)) != Character.toLowerCase(s.charAt(r)))
+                    return false;
+                l++;
+                r--;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 分割回文串
+     *
+     */
+    List<List<String>> res = new ArrayList<>();
+
+    public List<List<String>> partition(String s) {
+        if(s==null||s.length()==0)
+            return res;
+        dfs(s,new ArrayList<String>(),0);
+        return res;
+    }
+    /*在分割的过程中对于每一个字符串而言都可以分为两部分：左边一个回文串加右边一个子串，比如 “abc” 可分为 “a” + “bc” 。 然后对"bc"分割仍然是同样的方法，分为"b"+“c”。
+
+    在处理的时候去优先寻找更短的回文串，然后回溯找稍微长一些的回文串分割方法，不断回溯，分割，直到找到所有的分割方法。
+
+    举个🌰：分割"aac"。
+
+    分割为 a + ac
+    分割为 a + a + c，分割后，得到一组结果，再回溯到 a + ac
+    a + ac 中 ac 不是回文串，继续回溯，回溯到 aac
+    分割为稍长的回文串，分割为 aa + c 分割完成得到一组结果，再回溯到 aac
+    aac 不是回文串，搜索结束*/
+    public void dfs(String s,List<String> remain,int left){
+        if(left==s.length()){  //判断终止条件
+            res.add(new ArrayList<String>(remain));
+            System.out.println("结果res为："+ Arrays.toString(res.toArray()));//添加到结果中
+            return;
+        }
+        for(int right=left;right<s.length();right++){  //从left开始，依次判断left->right是不是回文串
+            if(isPalindroom(s,left,right)){  //判断是否是回文串
+                remain.add(s.substring(left,right+1));
+                System.out.println("add当前remain 包含："+ Arrays.toString(remain.toArray())+"left:"+left+"right:"+right);//添加到当前回文串到list中
+                dfs(s,remain,right+1);  //从right+1开始继续递归，寻找回文串
+                remain.remove(remain.size()-1);  //回溯，从而寻找更长的回文串
+                System.out.println("remove当前remain 包含："+ Arrays.toString(remain.toArray())+"left:"+left+"right:"+right);//添加到当前回文串到list中
+            }
+        }
+    }
+    /**
+     * 判断是否是回文串
+     */
+    public boolean isPalindroom(String s,int left,int right){
+        while(left<right&&s.charAt(left)==s.charAt(right)){
+            left++;
+            right--;
+        }
+        return left>=right;
+    }
+
+    /**
+     * 单词拆分
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        int max_length=0;
+        for(String temp:wordDict){
+            max_length = temp.length() > max_length ? temp.length() : max_length;
+        }
+        // memo[i] 表示 s 中以 i - 1 结尾的字符串是否可被 wordDict 拆分
+        boolean[] memo = new boolean[n + 1];
+        memo[0] = true;
+        for (int i = 1; i <= n; i++) {
+            for (int j = i-1; j >= 0 && max_length >= i - j; j--) {
+                if (memo[j] && wordDict.contains(s.substring(j, i))) {
+                    memo[i] = true;
+                    System.out.println(Arrays.toString(memo)+"j:"+j+","+"i:"+i+s.substring(j, i));
+                    break;
+                }
+            }
+        }
+        return memo[n];
+    }
+
+    /**
+     * 字符串转整数
+     * @param str
+     * @return
+     */
+    public int StrToInt(String str) {
+        if (str == null || str.length() == 0)
+            return 0;
+        boolean isNegative = str.charAt(0) == '-';
+        int ret = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (i == 0 && (c == '+' || c == '-'))  /* 符号判定 */
+                continue;
+            if (c < '0' || c > '9')                /* 非法输入 */
+                return 0;
+            ret = ret * 10 + (c - '0');
+        }
+        return isNegative ? -ret : ret;
+    }
+
+
+
+    /**
+     * 合并两个有序链表--通过先构建一个头结点，然后遍历两个有序链表,按照升序链在新的头结点后边，
+     * 当处理到有一个链表为空时，则将另外一个链表直接链接到新链表后面
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode mergeTwoListsSimple(ListNode l1, ListNode l2) {
+        ListNode dummy=new ListNode(0);
+        ListNode temp=dummy;
+        while (l1!=null&&l2!=null){
+            if (l1.val<l2.val){
+                temp.next=l1;
+                l1=l1.next;
+            }
+            else {
+                temp.next=l2;
+                l2=l2.next;
+            }
+            temp=temp.next;
+        }
+        if (l1!=null){
+            temp.next=l1;
+        }if (l2!=null){
+            temp.next=l2;
+        }
+        return dummy.next;
+    }
 
     /**
      * 合并K个有序链表
@@ -185,7 +342,7 @@ public class Solution {
     }
 
     /**
-     * 落单的数--通过^运算来的到唯一的落单的数
+     * 落单的数--通过^运算来得到唯一落单的数
      * @param A
      * @return
      */
@@ -202,6 +359,21 @@ public class Solution {
         return res;
     }
 
+    /**
+     * 翻转字符串
+     * @param s
+     * @return
+     */
+    /*单词的构成：无空格字母构成一个单词，有些单词末尾会带有标点符号
+    输入字符串是否包括前导或者尾随空格？可以包括，但是反转后的字符不能包括
+    如何处理两个单词间的多个空格？在反转字符串中间空格减少到只含一个*/
+    /*示例：
+    输入:  "the sky is blue"
+    输出:  "blue is sky the"*/
+    /*解决思路：
+    先整体翻转---eulb si yks eht
+    然后对每个字符串单独翻转，注意空格处理
+    */
     public String reverseWords(String s) {
         // write your code here
         if (s.length() == 0) {
@@ -213,11 +385,11 @@ public class Solution {
         int start = -1;
         int end = -1;
         for (int i = 0; i < length; i++) {
-            if (str[i] != ' ') {
-                start = i == 0 || str[i - 1] == ' ' ? i : start;
-                end = i == length - 1 || str[i + 1] == ' ' ? i : end;
+            if (str[i] != ' ') {           //遍历字符串当遇到不为空格时，尝试更新 start和end 的位置
+                start = i == 0 || str[i - 1] == ' ' ? i : start;            //确定start的位置，当前一位不是空格时，则表示这个单词还不是一个新开始单词，start不变
+                end = i == length - 1 || str[i + 1] == ' ' ? i : end;       //确定end的位置，当后一位不是空格时，则表示这个单词未结束，end不变
             }
-            if (start != -1 && end != -1) {
+            if (start != -1 && end != -1) {   //当start和end都不为-1时，则表示有一个新的单词位置被确定，这时候可以进行翻转
                 reverseWord(str, start, end);
                 start = -1;
                 end = -1;
@@ -237,6 +409,16 @@ public class Solution {
         }
     }
 
+    /**
+     * 数组划分:---依据快排思路解决
+     * 给出一个整数数组 nums 和一个整数 k。划分数组（即移动数组 nums 中的元素），使得：
+     * 所有小于k的元素移到左边
+     * 所有大于等于k的元素移到右边
+     * 返回数组划分的位置，即数组中第一个位置 i，满足 nums[i] 大于等于 k。
+     * @param nums
+     * @param k
+     * @return
+     */
     public int partitionArray(int[] nums, int k) {
         // write your code here
         if (nums == null || nums.length == 0) {
@@ -260,11 +442,81 @@ public class Solution {
             }
 
         }
-
         return start;
 
     }
 
+    /**
+     * 三数之和--给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，
+     * 使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+     * 例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+     * 满足要求的三元组集合为：
+     * [
+     *   [-1, 0, 1],
+     *   [-1, -1, 2]
+     * ]
+     *
+     * 解决方法：首先对该数组排序，然后拆分，对要求三个元素之和拆解为：
+     * 通过for循环遍历一个外围元素（做判重操作，如果这个元素等于前一个元素，则抛弃）+两数之和
+     * 对于求两数之和，通过首尾相加，如果相加之和小于target，则首++，大于则尾++；
+     * 当相加之和等于target,也需要做判重操作，如果这个元素等于前一个元素，则抛弃，使首++；
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        if (nums.length==0||nums==null){
+            return new ArrayList<>();
+        }
+        List<List<Integer>> res=new ArrayList<>();
+        Arrays.sort(nums);
+        int len=nums.length;
+        for (int i = 0; i <len; i++) {
+            if (i==0||nums[i]!=nums[i-1]){
+                List<List<Integer>> integers=twoSums(nums,i,0-nums[i]);
+                res.addAll(integers);
+            }
+        }
+        return res;
+    }
+
+    private List<List<Integer>>  twoSums(int[] nums,int index,int target){
+        List<List<Integer>> integerLists=new ArrayList<>();
+        int left=index+1;
+        int right=nums.length-1;
+        while (left<right){
+            if (nums[left]+nums[right]<target){
+                left++;
+                continue;
+            }
+            else if (nums[left]+nums[right]>target){
+                right--;
+                continue;
+            }else {
+                if (left==index+1||nums[left-1]!=nums[left]){
+                    List<Integer> integerList=new ArrayList<>(3);
+                    integerList.add(nums[index]);
+                    integerList.add(nums[left]);
+                    integerList.add(nums[right]);
+                    integerLists.add(integerList);
+                    left++;
+                    right--;
+                    continue;
+                }else {
+                    left++;
+                }
+            }
+        }
+        return integerLists;
+    }
+
+    /**
+     * 链表划分：---
+     * 给定一个单链表和数值x，划分链表使得所有小于x的节点排在大于等于x的节点之前。
+     * 你应该保留两部分内链表节点原有的相对顺序。
+     * @param head
+     * @param x
+     * @return
+     */
     public ListNode partition(ListNode head, int x) {
         // write your code here
         if (head == null) {
@@ -439,6 +691,15 @@ public class Solution {
         return Math.max(res, Math.max(i, i1));
     }
 
+    /**
+     * 链表求和--使用一个sum变量来存储每次两个链表相加的和，先进行%取余构建新节点，然后使用/取是否进位
+     * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+     * * 输出：7 -> 0 -> 8
+     * * 原因：342 + 465 = 807
+     * @param l1
+     * @param l2
+     * @return
+     */
     public ListNode addLists(ListNode l1, ListNode l2) {
         // write your code here
         ListNode curl = new ListNode(0);
@@ -753,6 +1014,11 @@ public class Solution {
         return;
     }
 
+    /**
+     * 合并K个排序链表--通过归并排序-递归对两个有序链表做合并
+     * @param lists
+     * @return
+     */
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists.length == 0 || lists == null) {
             return null;
@@ -776,28 +1042,26 @@ public class Solution {
 
 
     private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        ListNode temp = new ListNode(0);
-        ListNode res = temp;
+        ListNode dummy = new ListNode(0);
+        ListNode res = dummy;
         while (l1 != null && l2 != null) {
-            if (l1.val <= l2.val) {
-                temp.next = new ListNode(l1.val);
-                temp = temp.next;
-                l1 = l1.next;
-                continue;
+            if (l1.val < l2.val) {
+               res.next=l1;
+               l1=l1.next;
             }
-            if (l1.val > l2.val) {
-                temp.next = new ListNode(l2.val);
-                temp = temp.next;
-                l2 = l2.next;
+            else  {
+                res.next=l2;
+                l2=l2.next;
             }
+            res=res.next;
         }
         if (l1 != null) {
-            temp.next = l1;
+            res.next = l1;
         }
         if (l2 != null) {
-            temp.next = l2;
+            res.next = l2;
         }
-        return res.next;
+        return dummy.next;
     }
 
     public int reverse(int x) {
