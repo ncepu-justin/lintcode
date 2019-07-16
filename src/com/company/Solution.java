@@ -821,7 +821,11 @@ public class Solution {
         return arr[m];
     }
 
-
+    /**
+     * 最长上升子序列
+     * @param nums
+     * @return
+     */
     public int longestIncreasingSubsequence(int[] nums) {
         if (nums.length == 0) {
             return 0;

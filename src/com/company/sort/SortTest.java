@@ -94,7 +94,7 @@ public class SortTest {
      * @return
      */
     public static void quickSort(int[] arrs, int low, int high) {
-        if (arrs.length == 0) {
+       if (arrs.length == 0) {
             return;
         }
         int length = arrs.length;
@@ -115,6 +115,7 @@ public class SortTest {
         System.out.println("Sorting: " + Arrays.toString(arrs));
         quickSort(arrs, low, left - 1);
         quickSort(arrs, left + 1, high);
+
 
     }
 
