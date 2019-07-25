@@ -22,7 +22,7 @@ public class PreOreder {
                     stack.push(head.right);
                 }
                 if (head.left!=null){
-                    stack.push(head.right);
+                    stack.push(head.left);
                 }
             }
         }

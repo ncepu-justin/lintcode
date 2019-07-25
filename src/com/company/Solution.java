@@ -2,6 +2,7 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -775,7 +776,12 @@ public class Solution {
 
     int arrs[][];
 
-    //1.背包问题记忆化搜索
+    /**
+     * 背包问题--解决 通过二维数组来保存曾经递归计算出来的值，然后自顶向下递归搜索
+     * @param m
+     * @param A
+     * @return
+     */
     public int backPack(int m, int[] A) {
         // write your code here
         if (m == 0) {
@@ -1092,7 +1098,19 @@ public class Solution {
         return res;
     }
 
-    public int lengthOfLongestSubstring1(String s) {
+    /**
+     * 给定一个字符串，请找出其中无重复字符的最长子字符串。
+     * 输入: "abcabcbb"
+     * 输出: 3
+     * 解释: 最长子串是 "abc".
+     * 样例 2:
+     * 输入: "bbbbb"
+     * 输出: 1
+     * 解释: 最长子串是 "b".
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
 
         int[] m = new int[256];
 
@@ -1108,6 +1126,44 @@ public class Solution {
         return res;
     }
 
+    public int lengthOfLongestSubstring2(String s) {
+        int[] map = new int[256];
+
+        int j = 0;
+        int i = 0;
+        int ans = 0;
+        for (i = 0; i < s.length(); i++) {
+            while (j < s.length() && map[s.charAt(j)]==0) {
+                map[s.charAt(j)] = 1;
+                ans = Math.max(ans, j-i + 1);
+                j ++;
+            }
+            map[s.charAt(i)] = 0;
+        }
+        return ans;
+    }
+
+    /**
+     * 空间换时间  使用hashset做去重处理,使用两个位置标记记录，right记录遍历到的位置，
+     * left保证（right-left）位置的单词不包含重复单词，使用res记录当前位置，无重复字符的最长长度
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring3(String s) {
+        int res = 0, left = 0, right = 0;
+        HashSet<Character> t = new HashSet<Character>();
+        while (right < s.length()) {
+            if (!t.contains(s.charAt(right))) {
+                t.add(s.charAt(right));
+                right++;
+                res = Math.max(res, t.size());
+            } else {
+                t.remove(s.charAt(left));
+                left++;
+            }
+        }
+        return res;
+    }
     String sub = "";
     int maxLen = 0;
 
@@ -1160,7 +1216,7 @@ public class Solution {
         /*listnode2 = listnode2.next;
         listnode2.next = new ListNode(5);*/
         Solution sl = new Solution();
-        //  sl.lengthOfLongestSubstring1("abcadbca");
+        sl.lengthOfLongestSubstring3("abcadbca");
 
     }
 }
