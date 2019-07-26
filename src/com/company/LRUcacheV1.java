@@ -23,10 +23,12 @@ public class LRUcacheV1 {
     }
 
     public void put(String key, Object value) {
+        //如果头结点为空，则创建新节点
         if (head == null) {
             head = new LRUNode(key, value);
             tail = head;
             map.put(key, head);
+            return;
         }
         LRUNode node = map.get(key);
         if (node != null) {
@@ -39,7 +41,7 @@ public class LRUcacheV1 {
             // 如果会溢出
             if (map.size() >= capacity) {
                 // 先把它从哈希表中删除
-                map.remove(tail);
+                map.remove(tail.key);
                 // 删除尾部节点
                 tail = tail.pre;
                 tail.next = null;
