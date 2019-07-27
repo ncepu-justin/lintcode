@@ -44,7 +44,8 @@ public class LRUcacheV1 {
                 map.remove(tail.key);
                 // 删除尾部节点
                 tail = tail.pre;
-                tail.next = null;
+                if (tail != null)
+                    tail.next = null;
             }
             map.put(key, tmp);
             // 插入
@@ -70,7 +71,8 @@ public class LRUcacheV1 {
             return;
         } else if (node == tail) {
             tail = node.pre;
-            tail.next = null;
+            if (tail != null)
+                tail.next = null;
         } else {
             node.pre.next = node.next;
             node.next.pre = node.pre;
