@@ -62,7 +62,7 @@ public class LRUCache {
                 tail.next = null;
         } else {
             resNode.pre.next = resNode.next;
-            //注意变量赋值顺序
+            //注意变量赋值顺序(容易犯错)
             resNode.next.pre = resNode.pre;
         }
         //插入头结点
