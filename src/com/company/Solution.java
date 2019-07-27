@@ -1111,37 +1111,17 @@ public class Solution {
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
-
         int[] m = new int[256];
-
         int res = 0, left = 0;
-
+        //基于字符在数组中对应的ASCII码的特性--较难理解
         for (int i = 0; i < s.length(); i++) {
-            left = Math.max(left, m[s.charAt(i)]);
-
-            res = Math.max(res, i - left + 1);
-
-            m[s.charAt(i)] = i + 1;
+            left = Math.max(left, m[s.charAt(i)]);//left确定当前无重复字符串左下标
+            res = Math.max(res, i - left + 1);//目前最长的无重复字符串
+            m[s.charAt(i)] = i + 1; //在该字符位置存储该字符在字符串中的最新下标，
         }
         return res;
     }
 
-    public int lengthOfLongestSubstring2(String s) {
-        int[] map = new int[256];
-
-        int j = 0;
-        int i = 0;
-        int ans = 0;
-        for (i = 0; i < s.length(); i++) {
-            while (j < s.length() && map[s.charAt(j)]==0) {
-                map[s.charAt(j)] = 1;
-                ans = Math.max(ans, j-i + 1);
-                j ++;
-            }
-            map[s.charAt(i)] = 0;
-        }
-        return ans;
-    }
 
     /**
      * 空间换时间  使用hashset做去重处理,使用两个位置标记记录，right记录遍历到的位置，
