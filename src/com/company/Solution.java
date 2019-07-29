@@ -301,7 +301,7 @@ public class Solution {
         if (x == 0) {
             return 0;
         }
-        int left = 1, right = 46341;
+        int left = 1, right = x/2;
         int mid = 0;
 
         while (left < right) {
@@ -511,7 +511,7 @@ public class Solution {
     }
 
     /**
-     * 链表划分：---
+     * 链表划分：----两次遍历--第一次遍历寻找小于x节点并依次插入临时节点，第二次遍历寻找大于x节点并依次插入到之前临时节点
      * 给定一个单链表和数值x，划分链表使得所有小于x的节点排在大于等于x的节点之前。
      * 你应该保留两部分内链表节点原有的相对顺序。
      * @param head
@@ -526,7 +526,7 @@ public class Solution {
         ListNode curl = head;
         ListNode temp = new ListNode(0);
         ListNode result = temp;
-        while (curl != null) {
+        while (curl != null) {   //第一次遍历--寻找比x小的节点
             if (curl.val < x) {
                 temp.next = new ListNode(curl.val);
                 temp = temp.next;
@@ -534,7 +534,7 @@ public class Solution {
             curl = curl.next;
         }
 
-        while (head != null) {
+        while (head != null) {   //第二次遍历--寻找比x大的节点
             if (head.val >= x) {
                 temp.next = new ListNode(head.val);
                 temp = temp.next;
@@ -563,6 +563,24 @@ public class Solution {
     }
 
     /*[-1, -2, -3, 4, 5, 6]，重新排序之后，变成[-1, 5, -2, 4, -3, 6]*/
+
+    /**
+     *
+     * lintcode:144. 交错正负数
+     * 给出一个含有正整数和负整数的数组，重新排列成一个正负数交错的数组。
+     *
+     * 样例
+     * 样例 1
+     *
+     * 输入 : [-1, -2, -3, 4, 5, 6]
+     * 输出 : [-1, 5, -2, 4, -3, 6]
+     * 解释 : 或者仍和满足条件的答案
+     *
+     * 基于快排，以0为基准，进行一次分治，将整个数组分为比0小和比0大两部分
+     * 然后将两边元素 交叉互换
+     *
+     * @param A
+     */
     public void rerange(int[] A) {
         // write your code here
         if (A == null) {
@@ -1143,31 +1161,6 @@ public class Solution {
             }
         }
         return res;
-    }
-    String sub = "";
-    int maxLen = 0;
-
-    public String longestPalindrome(String s) {
-        if (s.length() == 0 || s == null) {
-            return "";
-        }
-        int length = s.length();
-        for (int i = 0; i < length; i++) {
-            findLongestPalindrome(s, i, i);
-            findLongestPalindrome(s, i, i + 1);
-        }
-        return sub;
-    }
-
-    private void findLongestPalindrome(String s, int start, int end) {
-        while (start >= 0 && end < s.length()) {
-            if (s.charAt(start) == s.charAt(end)) {
-                maxLen = Math.max(maxLen, end - start + 1);
-
-            } else {
-                break;
-            }
-        }
     }
 
 
