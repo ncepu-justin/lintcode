@@ -644,6 +644,11 @@ public class Solution {
         return result.toString();
     }
 
+    /**
+     * 链表排序--基于快排
+     * @param head
+     * @return
+     */
     public ListNode sortList(ListNode head) {
         // write your code here
         if (head == null) {
@@ -651,7 +656,6 @@ public class Solution {
         }
         quickSort(head, null);
         return head;
-
     }
 
     private void quickSort(ListNode start, ListNode end) {
@@ -665,12 +669,12 @@ public class Solution {
     }
 
     private ListNode partition(ListNode start, ListNode end) {
-        int flag = start.val;
-        ListNode p1 = start, p2 = p1.next;
+        int flag = start.val;                 //开始节点做标识位
+        ListNode p1 = start, p2 = p1.next;    //
         while (p2 != end) {
             if (p2.val < flag) {
                 p1 = p1.next;
-                swap(p1, p2);
+                swap(p1, p2);    //
             }
             p2 = p2.next;
         }

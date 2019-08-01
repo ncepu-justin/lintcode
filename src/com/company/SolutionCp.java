@@ -1,9 +1,6 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class SolutionCp {
 
@@ -142,45 +139,46 @@ public class SolutionCp {
 
     /**
      * 编写一个函数来查找字符串数组中的最长公共前缀。
-     *
+     * <p>
      * 如果不存在公共前缀，返回空字符串 ""。
-     *
+     * <p>
      * 示例 1:
-     *
+     * <p>
      * 输入: ["flower","flow","flight"]
      * 输出: "fl"
      * 示例 2:
-     *
+     * <p>
      * 输入: ["dog","racecar","car"]
      * 输出: ""
      * 解释: 输入不存在公共前缀。
-     *
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/longest-common-prefix
      * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
      * @param strs
      * @return
      */
     public String longestCommonPrefix(String[] strs) {
-        if (strs==null||strs.length==0){
+        if (strs == null || strs.length == 0) {
             return "";
         }
-        int length=strs.length;
-        int index=0;
-        int maxLen=strs[index].length();
-        for (int i = 0; i <length ; i++) {
-            if (strs[i].length()<maxLen){
-                maxLen=strs[i].length();
-                index=i;
+        int length = strs.length;
+        int index = 0;
+        int maxLen = strs[index].length();
+        for (int i = 0; i < length; i++) {
+            if (strs[i].length() < maxLen) {
+                maxLen = strs[i].length();
+                index = i;
             }
         }
-        if (maxLen==0){
+        if (maxLen == 0) {
             return "";
         }
-        StringBuilder res=new StringBuilder();
-        for (int i = 0; i <maxLen ; i++) {
-            for (int j = 0; j <length ; j++) {
-                if (strs[index].charAt(i)!=strs[j].charAt(i)){
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < maxLen; i++) {
+            for (int j = 0; j < length; j++) {
+                if (strs[index].charAt(i) != strs[j].charAt(i)) {
                     return res.toString();
                 }
             }
@@ -192,48 +190,50 @@ public class SolutionCp {
     /**
      * leetcode 5--最长回文子串
      * 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
-     *
+     * <p>
      * 示例 1：
-     *
+     * <p>
      * 输入: "babad"
      * 输出: "bab"
      * 注意: "aba" 也是一个有效答案。
      * 示例 2：
-     *
+     * <p>
      * 输入: "cbbd"
      * 输出: "bb"
-     *
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/longest-palindromic-substring
      * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
      * @param s
      * @return
      */
-    int maxLen=0;
-    String sub="";
+    int maxLen = 0;
+    String sub = "";
+
     public String longestPalindrome(String s) {
-        if (s==null||s.length()==0){
+        if (s == null || s.length() == 0) {
             return "";
         }
-        int len=s.length();
-        for (int i = 0; i <len ; i++) {
-            findLongestPalindrome(s,i,i);
-            findLongestPalindrome(s,i,i+1);
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            findLongestPalindrome(s, i, i);
+            findLongestPalindrome(s, i, i + 1);
         }
         return sub;
 
     }
 
     private void findLongestPalindrome(String s, int start, int end) {
-        while (start>=0&&end<=s.length()-1){
-            if (s.charAt(start)==s.charAt(end)){
-                if (end-start+1>maxLen){
-                    maxLen=end-start+1;
-                    sub=s.substring(start,end+1);
+        while (start >= 0 && end <= s.length() - 1) {
+            if (s.charAt(start) == s.charAt(end)) {
+                if (end - start + 1 > maxLen) {
+                    maxLen = end - start + 1;
+                    sub = s.substring(start, end + 1);
                 }
                 start--;
                 end++;
-            }else {
+            } else {
                 break;
             }
         }
@@ -241,18 +241,18 @@ public class SolutionCp {
 
     /**
      * 给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
-     *
+     * <p>
      * 不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成
      * 给定 nums = [0,0,1,1,1,2,2,3,3,4],
      * 函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
      * 你不需要考虑数组中超出新长度后面的元素。
-     *
+     * <p>
      * 经典解法：（双指针）
      * 数组完成排序后，我们可以放置两个指针 i 和 j，其中 i 是慢指针，而 j是快指针。
      * 只要 nums[i] = nums[j]，我们就增加 j 以跳过重复项。
      * 当我们遇到 nums[j] 不等于nums[i]跳过重复项的运行已经结束，因此我们必须把它（nums[j]）的值复制到 nums[i + 1]。
      * 然后递增 i，接着我们将再次重复相同的过程，直到 j 到达数组的末尾为止。
-     *
+     * <p>
      * 时间复杂度：O(n)，假设数组的长度是 n，那么 i和 j分别最多遍历 nn 步。
      * 空间复杂度：O(1)。
      */
@@ -268,11 +268,53 @@ public class SolutionCp {
         return i + 1;
     }
 
+    /**
+     * leetcode 20. 有效的括号
+     * 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+     * 有效字符串需满足：
+     * 左括号必须用相同类型的右括号闭合。
+     * 左括号必须以正确的顺序闭合。
+     * 注意空字符串可被认为是有效字符串。
+     * 思路基于栈实现--先进后出
+     *
+     * @param s
+     * @return
+     */
+    public boolean isValid(String s) {
+        if (s.length() % 2 != 0) {
+            return false;
+        }
+        Stack<Character> stack = new Stack<>();
+        int len = s.length();
+        char match;
+        for (int i = 0; i < len; i++) {
+            if (s.charAt(i) == '(' || s.charAt(i) == '{' || s.charAt(i) == '[')
+                stack.push(s.charAt(i));
+            else {
+                if (stack.size() == 0)
+                    return false;
+                char pop=stack.pop();
+                if (pop == '(')
+                    match = ')';
+                else if (pop == '{')
+                    match = '}';
+                else {
+                    if (pop != '[')
+                        return false;
+                    match = ']';
+                }
+                if (s.charAt(i) != match)
+                    return false;
+            }
+        }
+        if (stack.size() != 0)
+            return false;
+        return true;
+    }
 
     public static void main(String[] args) {
-        int nums[]={0,0,1,1,1,2,2,3,3,4};
+        int nums[] = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
         SolutionCp solutionCp = new SolutionCp();
-        int res=solutionCp.removeDuplicates(nums);
-        System.out.println(res);
+        solutionCp.isValid("()[]{}");
     }
 }
