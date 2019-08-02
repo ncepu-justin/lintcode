@@ -293,7 +293,7 @@ public class SolutionCp {
             else {
                 if (stack.size() == 0)
                     return false;
-                char pop=stack.pop();
+                char pop = stack.pop();
                 if (pop == '(')
                     match = ')';
                 else if (pop == '{')
@@ -312,6 +312,164 @@ public class SolutionCp {
         return true;
     }
 
+    /**
+     * leetcode 104-二叉树的最大深度
+     * 给定一个二叉树，找出其最大深度。
+
+     二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+
+     说明: 叶子节点是指没有子节点的节点。
+
+     示例：
+     给定二叉树 [3,9,20,null,null,15,7]，
+
+     3
+     / \
+     9  20
+     /  \
+     15   7
+     返回它的最大深度 3 。
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+        return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+    }
+
+    /**
+     * leetcode 111-二叉树的最大深度
+     * 给定一个二叉树，找出其最小深度。
+     最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+     说明: 叶子节点是指没有子节点的节点。
+     示例:
+     给定二叉树 [3,9,20,null,null,15,7],
+     3
+     / \
+     9  20
+     /  \
+     15   7
+     返回它的最小深度  2.
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        if ((root.left == null) && (root.right == null)) {
+            return 1;
+        }
+        int min_depth = Integer.MAX_VALUE;
+        if (root.left != null) {
+            min_depth = Math.min(minDepth(root.left), min_depth);
+        }
+        if (root.right != null) {
+            min_depth = Math.min(minDepth(root.right), min_depth);
+        }
+        return min_depth + 1;
+    }
+
+    /**
+     * leetcod-226 翻转二叉树
+     * 示例：
+
+     输入：
+
+     4
+     /   \
+     2     7
+     / \   / \
+     1   3 6   9
+     输出：
+
+     4
+     /   \
+     7     2
+     / \   / \
+     9   6 3   1
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode right = invertTree(root.right);
+        TreeNode left = invertTree(root.left);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    /**
+     * leetcode:100 相同的树
+     *   示例 1:
+
+     输入:       1         1
+     / \       / \
+     2   3     2   3
+
+     [1,2,3],   [1,2,3]
+
+     输出: true
+     示例 2:
+
+     输入:      1          1
+     /           \
+     2             2
+
+     [1,2],     [1,null,2]
+
+     输出: false
+     * @param p
+     * @param q
+     * @return
+     */
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p == null && q == null)
+            return true;
+        if(p == null || q == null)
+            return false;
+        if(p.val != q.val)
+            return false;
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    /**
+     * leetcode:101 对称二叉树
+     * 给定一个二叉树，检查它是否是镜像对称的。
+
+     例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+     1
+     / \
+     2   2
+     / \ / \
+     3  4 4  3
+     但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+     1
+     / \
+     2   2
+     \   \
+     3    3
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return isMirror(root, root);
+    }
+
+    public boolean isMirror(TreeNode t1, TreeNode t2) {
+        if (t1 == null && t2 == null) return true;
+        if (t1 == null || t2 == null) return false;
+        return (t1.val == t2.val)
+                && isMirror(t1.right, t2.left)
+                && isMirror(t1.left, t2.right);
+    }
     public static void main(String[] args) {
         int nums[] = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
         SolutionCp solutionCp = new SolutionCp();

@@ -5,13 +5,25 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * leetcode-46. 全排列
+ * 输入: [1,2,3]
+ * 输出:
+ * [
+ * [1,2,3],
+ * [1,3,2],
+ * [2,1,3],
+ * [2,3,1],
+ * [3,1,2],
+ * [3,2,1]
+ * ]
+ *
  * 递归回溯 求数组全排列
  * Created by Justin
  * 2019/4/1  17:31
  */
 public class WholeSort {
 
-    public static int sortArray[] = {4, 7, 5, 9};
+    public static int sortArray[] = {1,2,3};
 
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> results = new ArrayList<>();
@@ -23,7 +35,7 @@ public class WholeSort {
 
         return results;
     }
-
+    //TODO
     private void dfs(int[] nums,
                      boolean[] visited,
                      List<Integer> permutation,
@@ -44,6 +56,7 @@ public class WholeSort {
             visited[i] = false;
             permutation.remove(permutation.size() - 1);
             System.out.println("删除："+Arrays.toString(permutation.toArray()));
+            System.out.println("删除后访问："+Arrays.toString(visited));
         }
     }
 
