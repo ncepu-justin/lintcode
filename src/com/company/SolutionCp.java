@@ -64,7 +64,6 @@ public class SolutionCp {
     public int lengthOfLongestSubstring1(String s) {
         int res = 0, left = 0, right = 0;
         HashSet<Character> t = new HashSet<Character>();
-
         while (right < s.length()) {
             if (!t.contains(s.charAt(right))) {
                 t.add(s.charAt(right));
@@ -112,7 +111,7 @@ public class SolutionCp {
 
             if (Character.isDigit(c)) {
                 isModify = true;
-                if (res == max) {
+                if (res == max) {//如果当前值等于max 则需要判断新增的位数是否大于7
                     if (isNegtive && (c - '0') > 7) {
                         return Integer.MIN_VALUE;
                     } else if ((c - '0') > 7) {
@@ -121,7 +120,7 @@ public class SolutionCp {
                         return isNegtive ? -(res * 10 + (c - '0')) : res * 10 + (c - '0');
                     }
                 }
-                if (res > max) {
+                if (res > max) {//如果当前值大于max 则直接返回最大值即可（根据正负号）
                     if (isNegtive) {
                         return Integer.MIN_VALUE;
                     }
@@ -253,7 +252,7 @@ public class SolutionCp {
      * 当我们遇到 nums[j] 不等于nums[i]跳过重复项的运行已经结束，因此我们必须把它（nums[j]）的值复制到 nums[i + 1]。
      * 然后递增 i，接着我们将再次重复相同的过程，直到 j 到达数组的末尾为止。
      * <p>
-     * 时间复杂度：O(n)，假设数组的长度是 n，那么 i和 j分别最多遍历 nn 步。
+     * 时间复杂度：O(n)，假设数组的长度是 n，那么 i和 j分别最多遍历 n 步。
      * 空间复杂度：O(1)。
      */
     public int removeDuplicates(int[] nums) {
@@ -534,7 +533,6 @@ public class SolutionCp {
         if (root == null)
             return 0;
         int left = height(root.left);
-
         int right = height(root.right);
 
         if (Math.abs(left - right) > 1)
@@ -870,26 +868,6 @@ public class SolutionCp {
         return res;
     }
 
-    /**
-     * 235. 二叉搜索树的最近公共祖先
-     * 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
-     * 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，
-     * 满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
-     *
-     * @param root
-     * @param p
-     * @param q
-     * @return
-     */
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null)
-            return null;
-        if (p.val > root.val && q.val > root.val)
-            return lowestCommonAncestor(root.right, p, q);
-        if (p.val < root.val && q.val < root.val)
-            return lowestCommonAncestor(root.left, p, q);
-        return root;
-    }
 
     /**
      * 98. 验证二叉搜索树
@@ -1019,6 +997,55 @@ public class SolutionCp {
         return -1;
     }
 
+    /**
+     * 235. 二叉搜索树的最近公共祖先
+     * 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+     * 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，
+     * 满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestorBst(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null)
+            return null;
+        if (p.val > root.val && q.val > root.val)
+            return lowestCommonAncestor(root.right, p, q);
+        if (p.val < root.val && q.val < root.val)
+            return lowestCommonAncestor(root.left, p, q);
+        return root;
+    }
+
+    /**
+     * 236. 二叉树的最近公共祖先
+     * 从根节点开始遍历树。
+     * 如果当前节点本身是 p 或 q 中的一个，我们会将变量 mid 标记为 1，并继续搜索左右分支中的另一个节点。
+     * 如果左分支或右分支中的任何一个返回 1，则表示在下面找到了两个节点中的一个。
+     * 如果在遍历的任何点上，左、右或中三个标志中的任意两个变为 1，这意味着我们找到了节点 p 和 q 的最近公共祖先。
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+
+    TreeNode res = null;
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        dfs(root, p, q);
+        return res;
+    }
+
+    private int dfs(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) return 0;
+        int left = dfs(root.left, p, q);
+        int right = dfs(root.right, p, q);
+        int mid = root == p || root == q ? 1 : 0;
+        if (left + right + mid > 1) res = root;
+        return left + right + mid > 0 ? 1 : 0;
+    }
 
 
     /**
@@ -1088,10 +1115,10 @@ public class SolutionCp {
         int memo[][] = new int[col][row];
         memo[0][0] = obstacleGrid[0][0] == 1 ? 0 : 1;
         for (int i = 1; i < row; i++) {
-            memo[0][i] = obstacleGrid[0][i] == 1 ? 0 : memo[0][i-1];
+            memo[0][i] = obstacleGrid[0][i] == 1 ? 0 : memo[0][i - 1];
         }
         for (int j = 1; j < col; j++) {
-            memo[j][0] = obstacleGrid[j][0] == 1 ? 0 : memo[j-1][0];
+            memo[j][0] = obstacleGrid[j][0] == 1 ? 0 : memo[j - 1][0];
         }
         for (int i = 1; i < col; i++) {
             for (int j = 1; j < row; j++) {
@@ -1099,6 +1126,51 @@ public class SolutionCp {
             }
         }
         return memo[col - 1][row - 1];
+    }
+
+    /**
+     * 160. 相交链表
+     * 编写一个程序，找到两个单链表相交的起始节点。程序尽量满足 O(n) 时间复杂度，且仅用 O(1) 内存。
+     * 让两个链表从同距离末尾同等距离的位置开始遍历。这个位置只能是较短链表的头结点位置。为此，我们必须消除两个链表的长度差
+     *
+     * @param headA
+     * @param headB
+     * @return
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null)
+            return null;
+        ListNode pA = headA, pB = headB;
+        while (pA != pB) {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
+        }
+        return pA;
+    }
+
+    //倒排--寻找最大的元素插入nums1
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int toLen = nums1.length-1;
+        int right1 = m - 1, right2 = n - 1;
+        while (right1 >= 0 || right2 >= 0) {
+            if (right1 >= 0 && right2 >= 0) {
+                if (nums1[right1]>nums2[right2]){
+                    nums1[toLen]=nums1[right1];
+                    right1--;
+                }else {
+                    nums1[toLen]=nums2[right2];
+                    right2--;
+                }
+            }
+             else if (right2>=0){
+                nums1[toLen]=nums2[right2];
+                right2--;
+            }
+            else {
+                return;
+            }
+            toLen--;
+        }
     }
 
     public static void main(String[] args) {
