@@ -782,6 +782,7 @@ public class Solution {
         return res;
     }
 
+
     public int rob1(int[] nums) {
         int n = nums.length;
         if (n == 0) {
@@ -1193,7 +1194,7 @@ public class Solution {
         /*listnode2 = listnode2.next;
         listnode2.next = new ListNode(5);*/
         Solution sl = new Solution();
-        sl.lengthOfLongestSubstring3("abcadbca");
+        sl.partition("abcadacb");
 
     }
 }

@@ -47,7 +47,6 @@ public class SolutionCp {
             return -1;
         }
         int[] m = new int[256];
-
         int res = 0, left = 0;
 
         for (int i = 0; i < s.length(); i++) {
@@ -480,7 +479,7 @@ public class SolutionCp {
     }
 
     /**
-     * leetcode:101 对称二叉树--非递归版本--基于队列
+     * leetcode:101 对称二叉树--非递归版本--基于队列（层次遍历）
      *
      * @param root
      * @return
@@ -682,7 +681,7 @@ public class SolutionCp {
      * @param prices
      * @return
      */
-    public int maxProfitNbusiness(int[] prices) {
+    public int maxProfitNbusiness1(int[] prices) {
         if (prices == null || prices.length == 0)
             return 0;
         int i = 0;
@@ -699,6 +698,25 @@ public class SolutionCp {
             }
             peak = prices[i];  //峰值
             maxprofit += peak - valley;
+        }
+        return maxprofit;
+    }
+
+    /**
+     * 122. 买卖股票的最佳时机 II
+     * 设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+     * 考虑到紧跟谷的每一个峰值以最大化利润。
+     * 如果我们试图跳过其中一个峰值来获取更多利润，
+     * 那么我们最终将失去其中一笔交易中获得的利润，从而导致总利润的降低。
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfitNbusiness2(int[] prices) {
+        int maxprofit = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] > prices[i - 1])
+                maxprofit += prices[i] - prices[i - 1];
         }
         return maxprofit;
     }
@@ -1148,34 +1166,328 @@ public class SolutionCp {
         return pA;
     }
 
-    //倒排--寻找最大的元素插入nums1
+
+    /**
+     * 88. 合并两个有序数组
+     * //倒排--寻找最大的元素插入nums1
+     *
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int toLen = nums1.length-1;
+        int toLen = nums1.length - 1;
         int right1 = m - 1, right2 = n - 1;
         while (right1 >= 0 || right2 >= 0) {
             if (right1 >= 0 && right2 >= 0) {
-                if (nums1[right1]>nums2[right2]){
-                    nums1[toLen]=nums1[right1];
+                if (nums1[right1] > nums2[right2]) {
+                    nums1[toLen] = nums1[right1];
                     right1--;
-                }else {
-                    nums1[toLen]=nums2[right2];
+                } else {
+                    nums1[toLen] = nums2[right2];
                     right2--;
                 }
-            }
-             else if (right2>=0){
-                nums1[toLen]=nums2[right2];
+            } else if (right2 >= 0) {
+                nums1[toLen] = nums2[right2];
                 right2--;
-            }
-            else {
+            } else {
                 return;
             }
             toLen--;
         }
     }
 
+    /**
+     * 61. 旋转链表
+     * 给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+     * 示例 1:
+     * 输入: 1->2->3->4->5->NULL, k = 2
+     * 输出: 4->5->1->2->3->NULL
+     * 解释:
+     * 向右旋转 1 步: 5->1->2->3->4->NULL
+     * 向右旋转 2 步: 4->5->1->2->3->NULL
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null)
+            return null;
+        ListNode tail = head, cut = head;
+        int len = 0;
+        while (tail.next != null) {
+            tail = tail.next;
+            len++;
+        }
+        k %= len + 1;
+        for (int i = 0; i < len - k; i++)
+            cut = cut.next;        //找到切割点
+        tail.next = head;            //将当前尾结点指向头结点--先成环--防止cut.next=null这种情况
+        ListNode res = cut.next;     //待返回的头结点
+        cut.next = null;             //切断环
+        return res;
+    }
+
+    /**
+     * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+     * 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+     * 注意：给定 n 是一个正整数。
+     * 示例 1：
+     * 输入： 2
+     * 输出： 2
+     * 解释： 有两种方法可以爬到楼顶。
+     * 1.  1 阶 + 1 阶
+     * 2.  2 阶
+     * 斐波那契数
+     *
+     * @param n
+     * @return
+     */
+
+    public int climbStairs(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        int first = 1;
+        int second = 2;
+        for (int i = 3; i <= n; i++) {
+            int third = first + second;
+            first = second;
+            second = third;
+        }
+        return second;
+    }
+
+    /**
+     * 93. 复原IP地址
+     * 给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
+     * 示例:
+     * 输入: "25525511135"
+     * 输出: ["255.255.11.135", "255.255.111.35"]
+     *
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> ans = new ArrayList<>();
+        backtracking(s, 0, new ArrayList<>(), ans);
+        return ans;
+    }
+
+    // cur : 当前答案，以 String List的形式，最后再join成String形式 例如 [[255],[255],[111],[35]] -> 255.255.111.35
+    // pos, 当前扫描到的s的位置， ans最终答案
+    private void backtracking(String s, int pos, List<String> cur, List<String> ans) {
+        if (cur.size() >= 4) {
+            if (pos == s.length())
+                ans.add(String.join(".", cur));
+            return;
+        }
+        // 分割得到ip地址的一段后，下一段只能在长度1-3范围内选择
+        for (int i = 1; i <= 3; i++) {
+            if (pos + i > s.length()) break;
+            String segment = s.substring(pos, pos + i);
+            // 剪枝条件：不能以0开头，不能大于255
+            if (segment.startsWith("0") && segment.length() > 1 || (i == 3 && Integer.parseInt(segment) > 255))
+                continue;
+            cur.add(segment);
+            // 注意此处传的参数
+            backtracking(s, pos + i, cur, ans);
+            cur.remove(cur.size() - 1);
+        }
+    }
+
+
+    /**
+     * 39. 组合总和
+     * 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+     * <p>
+     * candidates 中的数字可以无限制重复被选取。
+     * <p>
+     * 说明：
+     * <p>
+     * 所有数字（包括 target）都是正整数。
+     * 解集不能包含重复的组合。 
+     * 示例 1:
+     * <p>
+     * 输入: candidates = [2,3,6,7], target = 7,
+     * 所求解集为:
+     * [
+     * [7],
+     * [2,2,3]
+     * ]
+     *
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);  //减少重复
+        backtrack(candidates, target, res, 0, new ArrayList<Integer>());
+        return res;
+    }
+
+    private void backtrack(int[] candidates, int target, List<List<Integer>> res, int i, ArrayList<Integer> tmp_list) {
+        if (target < 0) return;
+        if (target == 0) {
+            res.add(new ArrayList<>(tmp_list));
+            return;
+        }
+        for (int start = i; start < candidates.length; start++) {
+            if (target < candidates[start]) break;
+            tmp_list.add(candidates[start]);
+            backtrack(candidates, target - candidates[start], res, start, tmp_list);
+            tmp_list.remove(tmp_list.size() - 1);
+        }
+    }
+
+    /**
+     * 16. 最接近的三数之和
+     * 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，
+     * 使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+     * 例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
+     * 与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int threeSumClosest(int[] nums, int target) {
+        if (nums == null || nums.length < 3)
+            return 0;
+        Arrays.sort(nums);
+        int closestNum = nums[0] + nums[1] + nums[2];
+        int len = nums.length;
+        for (int i = 0; i < len - 2; i++) {
+            int left = i + 1, right = len - 1;
+            while (left < right) {
+                int temp = nums[i] + nums[left] + nums[right];
+                if (Math.abs(target - closestNum) > Math.abs(target - temp)) {
+                    closestNum = temp;
+                } else if (temp > target)
+                    right--;
+                else if (temp < target)
+                    left++;
+                else return target;
+            }
+        }
+        return closestNum;
+    }
+
+    /**
+     * 392. 判断子序列
+     * 你可以认为 s 和 t 中仅包含英文小写字母。
+     * 字符串 t 可能会很长（长度 ~= 500,000），而 s 是个短字符串（长度 <=100）。
+     * 字符串的一个子序列是原始字符串删除一些（也可以不删除）
+     * 字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
+     *
+     * @param s--子串
+     * @param t--原字符串
+     * @return
+     */
+    public boolean isSubsequence(String s, String t) {
+        int slen = s.length();
+        int tLen = t.length();
+        int sIndex = 0, tIndex = 0;
+        while (sIndex < slen && tIndex < tLen) {
+            if (s.charAt(sIndex) == t.charAt(tIndex)) {
+                sIndex++;
+                tIndex++;
+            } else {
+                tIndex++;
+            }
+        }
+        if (sIndex == slen)
+            return true;
+        return false;
+    }
+
+
+
+    /*class myComparator implements Comparator<Interval> {
+        public int compare(Interval a, Interval b) {
+            if (a.start != b.start)
+                return a.start - b.start;
+            return a.end - b.end;
+        }
+    }
+
+    public int eraseOverlapIntervals(Interval[] intervals) {
+        if (intervals.length == 0) {
+            return 0;
+        }
+        Arrays.sort(intervals, new myComparator());
+        int dp[] = new int[intervals.length];
+        converterArr(dp);
+        for (int i = 1; i < intervals.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (intervals[i].start >= intervals[j].end)
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < dp.length; i++) {
+            res = Math.max(dp[i], res);
+        }
+        return intervals.length - res;
+    }*/
+
+    private void converterArr(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = 1;
+        }
+    }
+
+    /**
+     * 我们把数组 A 中符合下列属性的任意连续子数组 B 称为 “山脉”：
+     * B.length >= 3
+     * 存在 0 < i < B.length - 1 使得 B[0] < B[1] < ... B[i-1] < B[i] > B[i+1] > ... > B[B.length - 1]
+     * （注意：B 可以是 A 的任意子数组，包括整个数组 A。）
+     * 给出一个整数数组 A，返回最长 “山脉” 的长度。
+     * 如果不含有 “山脉” 则返回 0。
+     * 示例 1：
+     * 输入：[2,1,4,7,3,2,5]
+     * 输出：5
+     * 解释：最长的 “山脉” 是 [1,4,7,3,2]，长度为 5。
+     * 示例 2：
+     * 输入：[2,2,2]
+     * 输出：0
+     * 解释：不含 “山脉”。
+     *
+     * @param A
+     * @return
+     */
+    public int longestMountain(int[] A) {
+        if (A == null || A.length < 3) {
+            return 0;
+        }
+        int res = 0;
+        for (int i = 1; i < A.length - 1; i++) {
+            //find the maxium number [peak mountain]
+            if (A[i] > A[i - 1] && A[i] > A[i + 1]) {   //基于双指针，遍历找当前的山顶--然后基于山顶点向两边推广，存储当前最大值
+                //get the left pointer and right pointer, expand from the center ,get the maximum boundary
+                int l = i - 1;
+                int r = i + 1;
+                while (l > 0 && A[l - 1] < A[l]) {
+                    l--;
+                }
+                while (r < A.length - 1 && A[r] > A[r + 1]) {
+                    r++;
+                }
+                //record the maximum len
+                res = Math.max(res, r - l + 1);
+            }
+        }
+        return res;
+
+    }
+
     public static void main(String[] args) {
         int nums[][] = {{1, 0}};
         SolutionCp solutionCp = new SolutionCp();
-        solutionCp.uniquePathsWithObstacles(nums);
+        solutionCp.restoreIpAddresses("25525511135");
     }
 }

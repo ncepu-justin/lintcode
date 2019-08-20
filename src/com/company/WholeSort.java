@@ -30,12 +30,11 @@ public class WholeSort {
         if (nums == null) {
             return results;
         }
-
         dfs(nums, new boolean[nums.length], new ArrayList<Integer>(), results);
-
         return results;
     }
-    //TODO
+
+
     private void dfs(int[] nums,
                      boolean[] visited,
                      List<Integer> permutation,

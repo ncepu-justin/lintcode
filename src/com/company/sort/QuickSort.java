@@ -74,7 +74,6 @@ public class QuickSort {
     }
 
     public static void main(String[] args) {
-        quickSort(sortArray, 0, sortArray.length - 1);
-        System.out.println("Arrays.toString(arr) = " + Arrays.toString(sortArray));
+
     }
 }
