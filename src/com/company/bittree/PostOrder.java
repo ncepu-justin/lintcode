@@ -41,7 +41,7 @@ public class PostOrder {
             TreeNode c = null;
             while (!stack.empty()) {
                 c = stack.peek();
-                if (c.left != null && c.right != h && c.left != null) {
+                if (c.left != null && h != c.left && h != c.right) {
                     stack.push(c.left);
                 } else if (c.right != null && c.right != h) {
                     stack.push(c.right);

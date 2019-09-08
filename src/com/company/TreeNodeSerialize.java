@@ -8,6 +8,12 @@ import java.util.Queue;
  * 2019/4/1  11:25
  */
 public class TreeNodeSerialize {
+
+    /**
+     * 基于层次遍历--遍历
+     * @param root
+     * @return
+     */
     public String serialize(TreeNode root) {
         // write your code here
         String res = "";

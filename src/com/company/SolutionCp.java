@@ -572,7 +572,7 @@ public class SolutionCp {
     }
 
     /**
-     * leetcode 404. 左叶子之和
+     * leetcode 404. 左叶子之和--先序遍历--操作根节点（当其的左孩子不为空，且左孩子为叶子节点），则加入该左孩子的值
      * 3
      * / \
      * 9  20
@@ -723,7 +723,7 @@ public class SolutionCp {
 
 
     /**
-     * 257. 二叉树的所有路径
+     * 257. 二叉树的所有路径--先序遍历
      * 给定一个二叉树，返回所有从根节点到叶子节点的路径。
      * 说明: 叶子节点是指没有子节点的节点。
      * 示例:
@@ -1485,9 +1485,14 @@ public class SolutionCp {
 
     }
 
+
+
     public static void main(String[] args) {
-        int nums[][] = {{1, 0}};
-        SolutionCp solutionCp = new SolutionCp();
-        solutionCp.restoreIpAddresses("25525511135");
+        /*Scanner sc = new Scanner(System.in);
+        String src = sc.nextLine();
+        String s1 = sc.nextLine();
+        String s2 = sc.nextLine();*/
+        int[] t = {4, 3, 3, 3, 1, 1, 5, 5};
+        SolutionCp sp = new SolutionCp();
     }
 }

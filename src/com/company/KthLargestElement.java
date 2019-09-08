@@ -67,7 +67,6 @@ public class KthLargestElement {
             nums[right] = nums[left];
         }
         nums[left] = temp;
-
         if (k <right) {
             return partition2(nums, start, right-1, k);
         }

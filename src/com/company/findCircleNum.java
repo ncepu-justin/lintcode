@@ -30,4 +30,9 @@ public class findCircleNum {
         }
     }
 
+    public static void main(String[] args) {
+        int [][] arrs={{0,4,0},{4,0,0},{0,0,0}};
+        findCircleNum fn=new findCircleNum();
+        System.out.println(fn.findCircleNum(arrs));
+    }
 }
